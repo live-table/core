@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"declarationDir": "dist",
+		"module": "commonjs",
+		"sourceMap": true,
+		"strict": true
+	},
+	"exclude": [
+		"node_modules"
+	],
+	"files": [
+		"src/index.ts"
+	]
+}
