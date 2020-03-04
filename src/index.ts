@@ -26,6 +26,8 @@ export interface Action {
 	onClick(): void;
 }
 
+export interface BaseChildColumn extends BaseColumn {}
+
 export interface BaseColumn {
 	/** The label to display. */
 	label: string;
@@ -37,8 +39,13 @@ export interface BaseColumn {
 	title?: string;
 }
 
-export interface ChildColumn<DataRow> extends BaseColumn {
-	data: ColumnKey<DataRow>;
+export interface ChildColumnOfArray extends BaseChildColumn {
+	data: number;
+}
+
+export interface ChildColumnOfObject<DataRow extends object>
+extends BaseChildColumn {
+	data: keyof DataRow;
 }
 
 export interface ColumnCreator<DataRow> {
@@ -139,9 +146,18 @@ export interface Table<DataRow> {
 	liveTable: LiveTable<DataRow>;
 }
 
+export type ChildColumn<DataRow> =
+DataRow extends unknown[] ? ChildColumnOfArray :
+DataRow extends object ? ChildColumnOfObject<DataRow> :
+BaseChildColumn
+
 export type Column<DataRow> = ChildColumn<DataRow> | ParentColumn<DataRow>
+
 export type ColumnKey<DataRow> =
 DataRow extends unknown[] ? number :
 DataRow extends object ? keyof DataRow :
 undefined
-export type ColumnsOption<DataRow> = Column<DataRow>[] | ProceduralColumns<DataRow>
+
+export type ColumnsOption<DataRow> =
+Column<DataRow>[] |
+ProceduralColumns<DataRow>
