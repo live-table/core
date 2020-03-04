@@ -12,7 +12,12 @@ export function isParent<DataRow>(
 
 /**
  * Check whether the specified column is a child one.
+ *
+ * Formally, check whether the specified column is not a parent one.
+ *
  * @param column
+ *
+ * @see {@link isParent}
  */
 export function isChild<DataRow>(
 	column: Core.Column<DataRow>
