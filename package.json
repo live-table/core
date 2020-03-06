@@ -4,6 +4,7 @@
   "description": "The core specification and tools of a live-table.",
   "main": "dist/index.js",
   "scripts": {
+    "build": "ts-node scripts/build",
     "start": "ts-node scripts/start",
     "test": "jest"
   },
