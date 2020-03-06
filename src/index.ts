@@ -26,7 +26,33 @@ export interface Action {
 	onClick(): void;
 }
 
-export interface BaseChildColumn extends BaseColumn {}
+/** The specification of a child column when data rows are arrays. */
+export interface ArrayRowChildColumn extends BaseChildColumn {
+	/** The index of the data row item. */
+	index: number;
+}
+
+/** The specification of a column creator when data rows are arrays. */
+export interface ArrayRowColumnCreator {
+	/**
+	 * Create a {@link ArrayRowChildColumn} for the specified `index`.
+	 * When columns are created, the program loops over the items of the first
+	 * data row and calls this function on each iteration passing the current
+	 * index to the parameter `index`.
+	 *
+	 * @param index The index of the column.
+	 */
+	(index: number): ArrayRowChildColumn;
+}
+
+export interface BaseChildColumn extends BaseColumn {
+	/**
+	 * Whether the column is editable or not.
+	 *
+	 * The default value should be `false`.
+	 */
+	editable?: boolean;
+}
 
 export interface BaseColumn {
 	/** The label to display. */
@@ -37,24 +63,6 @@ export interface BaseColumn {
 	 * If undefined, the live-table should display the label as tooltip.
 	 */
 	title?: string;
-}
-
-export interface ChildColumnOfArray extends BaseChildColumn {
-	data: number;
-}
-
-export interface ChildColumnOfObject<DataRow extends object>
-extends BaseChildColumn {
-	data: keyof DataRow;
-}
-
-export interface ColumnCreator<DataRow> {
-	(colIndex: number): Column<DataRow>
-}
-
-export interface ProceduralColumns<DataRow> {
-	count: number;
-	createColumn: ColumnCreator<DataRow>;
 }
 
 /**
@@ -100,6 +108,15 @@ export interface LiveTable<DataRow> {
 	shouldDisplayHeader(): boolean;
 	/** The real table of the live-table. */
 	table: Table<DataRow> | null;
+}
+
+export interface ObjectRowChildColumn<DataRow extends object>
+extends BaseChildColumn {
+	data: keyof DataRow;
+}
+
+export interface ObjectRowColumnCreator<DataRow extends object> {
+	(data: keyof DataRow): ObjectRowChildColumn<DataRow>;
 }
 
 /**
@@ -150,17 +167,17 @@ export interface Table<DataRow> {
 }
 
 export type ChildColumn<DataRow> =
-DataRow extends unknown[] ? ChildColumnOfArray :
-DataRow extends object ? ChildColumnOfObject<DataRow> :
+DataRow extends unknown[] ? ArrayRowChildColumn :
+DataRow extends object ? ObjectRowChildColumn<DataRow> :
 BaseChildColumn
 
 export type Column<DataRow> = ChildColumn<DataRow> | ParentColumn<DataRow>
 
-export type ColumnKey<DataRow> =
-DataRow extends unknown[] ? number :
-DataRow extends object ? keyof DataRow :
-undefined
+export type ColumnCreator<DataRow> =
+DataRow extends unknown[] ? ArrayRowColumnCreator :
+DataRow extends object ? ObjectRowColumnCreator<DataRow> :
+Column<DataRow>
 
 export type ColumnsOption<DataRow> =
 Column<DataRow>[] |
-ProceduralColumns<DataRow>
+ColumnCreator<DataRow>
