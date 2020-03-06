@@ -1,0 +1,31 @@
+# This workflow will do a clean install of node dependencies
+# and run tests across different versions of node and OS.
+
+name: Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Dependencies installation
+        run: npm ci
+      - name: Unit test
+        run: npm test
+      - name: Installation test
+        run: npm i -g .
