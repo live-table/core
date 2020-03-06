@@ -83,10 +83,13 @@ export interface LiveTable<DataRow> {
 	 * implementation of {@link LiveTable}.
 	 */
 	isSearchable(): boolean;
+	/**
+	 * The callback function executed each time the user inputs in the search
+	 * field.
+	 */
+	onSearchInput?: SearchEventHandler<DataRow>;
 	/** Whether the live-table has to display the pagination. */
 	pagination?: PaginationOption;
-	/** Whether the live-table has to display the search area. */
-	search?: SearchOption<DataRow>;
 	/**
 	 * Check whether the implementation should display its header.
 	 *
@@ -123,14 +126,14 @@ export interface ParentColumn<DataRow> extends BaseColumn {
 }
 
 /**
- * The specification of a search option.
- * @typeParam TDataRow The type of a data row.
+ * The specification of a search event handler function.
+ * @typeParam DataRow The type of a data row.
  */
-export interface SearchOption<DataRow> {
+export interface SearchEventHandler<DataRow> {
 	/**
 	 * @param input The search input.
 	 * @param data The data displayed in the live-table.
-	 * @returns The filtered data matching the
+	 * @returns The filtered data matching the input.
 	 */
 	(input: string, data: DataRow[]): DataRow[];
 }
