@@ -36,6 +36,7 @@ export interface ArrayRowChildColumn extends BaseChildColumn {
 export interface ArrayRowColumnCreator {
 	/**
 	 * Create a {@link ArrayRowChildColumn} for the specified `index`.
+	 *
 	 * When columns are created, the program loops over the items of the first
 	 * data row and calls this function on each iteration passing the current
 	 * index to the parameter `index`.
@@ -47,9 +48,10 @@ export interface ArrayRowColumnCreator {
 
 export interface BaseChildColumn extends BaseColumn {
 	/**
-	 * Whether the column is editable or not.
+	 * Whether cells of the column are editable or not.
 	 *
-	 * The default value should be `false`.
+	 * The default value MUST be `false` and, if defined, MUST override the value
+	 * of {@link LiveTable.editable}.
 	 */
 	editable?: boolean;
 }
@@ -75,6 +77,12 @@ export interface LiveTable<DataRow> {
 	columns?: ColumnsOption<DataRow>;
 	/** The data to display in the live-table. */
 	data: DataRow[];
+	/**
+	 * Whether the cells of the table are editable.
+	 *
+	 * The default value MUST be `false`.
+	 */
+	editable?: boolean;
 	/**
 	 * Check whether the implementation has actions.
 	 *
