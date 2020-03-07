@@ -10,7 +10,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         node-version: [10.x, 12.x]
@@ -27,5 +27,24 @@ jobs:
         run: npm ci
       - name: Unit test
         run: npm test
+      - name: Upload reports
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.os }}-${{ matrix.node-version }}-coverage-reports
+          path: coverage
+      - name: Coveralls start
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
       - name: Installation test
         run: npm i -g .
+  finish-coveralls:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls end
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true

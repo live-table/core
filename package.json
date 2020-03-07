@@ -6,7 +6,7 @@
   "scripts": {
     "build": "ts-node scripts/build",
     "start": "ts-node scripts/start",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,12 @@
     "webpack-cli": "^3.3.11"
   },
   "jest": {
-    "preset": "ts-jest"
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "../coverage",
+    "preset": "ts-jest",
+    "rootDir": "src"
   }
 }
