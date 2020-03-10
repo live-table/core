@@ -1,6 +1,16 @@
 import * as Core from ".."
 
 /**
+ * Check whether the {@link "index".LiveTable} binded to the `this` parameter
+ * has at least one {@link "index".Action}.
+ *
+ * @param this The live-table implementation.
+ */
+export function hasActions<DataRow>(this: Core.LiveTable<DataRow>): boolean {
+	return !!this.settings.actions && this.settings.actions.length > 0
+}
+
+/**
  * Check whether the {@link "index".LiveTable} binded to the `this` parameter is
  * searchable.
  *
@@ -11,16 +21,6 @@ import * as Core from ".."
  */
 export function isSearchable<DataRow>(this: Core.LiveTable<DataRow>): boolean {
 	return !!this.settings.onSearchInput
-}
-
-/**
- * Check whether the {@link "index".LiveTable} binded to the `this` parameter
- * has at least one {@link "index".Action}.
- *
- * @param this The live-table implementation.
- */
-export function hasActions<DataRow>(this: Core.LiveTable<DataRow>): boolean {
-	return !!this.settings.actions && this.settings.actions.length > 0
 }
 
 /**
