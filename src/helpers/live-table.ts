@@ -40,5 +40,5 @@ export function isSearchable<DataRow>(this: Core.LiveTable<DataRow>): boolean {
 export function shouldDisplayHeader<DataRow>(
 	this: Core.LiveTable<DataRow>
 ): boolean {
-	return this.isSearchable()
+	return this.isSearchable() || this.hasActions()
 }
