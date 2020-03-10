@@ -147,11 +147,13 @@ export interface Pagination {
 	/**
 	 * The **zero-base** index of the page to display.<br>
 	 * This value should not be negative.
+	 *
+	 * Default: `0`
 	 */
 	page?: number;
 	/**
 	 * The number of rows to display on each page.<br>
-	 * This value should not be less or equal to `0`.
+	 * This value should not be negative or equal to `0`.
 	 */
 	rowsCount: number;
 }
