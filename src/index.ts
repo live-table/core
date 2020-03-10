@@ -69,20 +69,9 @@ export interface BaseColumn {
 
 /**
  * The base specification of a live-table.
- * @typeParam TDataRow The type of a data row.
+ * @typeParam DataRow The type of a data row.
  */
 export interface LiveTable<DataRow> {
-	actions?: Action[];
-	/** The columns definition. */
-	columns?: ColumnsOption<DataRow>;
-	/** The data to display in the live-table. */
-	data: DataRow[];
-	/**
-	 * Whether the cells of the table are editable.
-	 *
-	 * The default value MUST be `false`.
-	 */
-	editable?: boolean;
 	/**
 	 * Check whether the implementation has actions.
 	 *
@@ -99,13 +88,7 @@ export interface LiveTable<DataRow> {
 	 * implementation of {@link LiveTable}.
 	 */
 	isSearchable(): boolean;
-	/**
-	 * The callback function executed each time the user inputs in the search
-	 * field.
-	 */
-	onSearchInput?: SearchEventHandler<DataRow>;
-	/** Whether the live-table has to display the pagination. */
-	pagination?: PaginationOption;
+	settings: LiveTableSettings<DataRow>;
 	/**
 	 * Check whether the implementation should display its header.
 	 *
@@ -116,6 +99,33 @@ export interface LiveTable<DataRow> {
 	shouldDisplayHeader(): boolean;
 	/** The real table of the live-table. */
 	table: Table<DataRow> | null;
+}
+
+export interface LiveTableSettings<DataRow> {
+	actions?: Action[];
+	/**
+	 * The columns definition.
+	 */
+	columns?: ColumnsOption<DataRow>;
+	/**
+	 * The data to pass to the the {@link LiveTable}.
+	 */
+	data: DataRow[];
+	/**
+	 * Whether the cells of the table are editable.
+	 *
+	 * The default value MUST be `false`.
+	 */
+	editable?: boolean;
+	/**
+	 * The callback function executed each time the user inputs in the search
+	 * field.
+	 */
+	onSearchInput?: SearchEventHandler<DataRow>;
+	/**
+	 * Whether the live-table has to display the pagination.
+	 */
+	pagination?: PaginationOption;
 }
 
 export interface ObjectRowChildColumn<DataRow extends object>
