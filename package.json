@@ -6,7 +6,8 @@
   "scripts": {
     "build": "ts-node scripts/build",
     "start": "ts-node scripts/start",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "watch-test": "jest --coverage --watch"
   },
   "repository": {
     "type": "git",
