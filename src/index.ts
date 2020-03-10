@@ -26,6 +26,24 @@ export interface Action {
 	onClick(): void;
 }
 
+/**
+ * The specification of an aggregating event handler when data rows are arrays.
+ * @typeParam DataRow The type of a row of the array of data.
+ */
+export interface ArrayRowAggregateEventHandler<DataRow extends unknown[]>
+extends BaseAggregateEventHandler<DataRow> {
+	/**
+	 * Aggregate the values at the `index` of the specified `rows`.
+	 * @param rows The data rows to aggregate.
+	 * @param index The property of data rows to aggregate.
+	 * @typeParam Result The type of the resulting aggregation.
+	 */
+	<Result extends string | number | boolean>(
+		rows: DataRow[],
+		index: number
+	): Result;
+}
+
 /** The specification of a child column when data rows are arrays. */
 export interface ArrayRowChildColumn extends BaseChildColumn {
 	/** The index of the data row item. */
@@ -44,6 +62,19 @@ export interface ArrayRowColumnCreator {
 	 * @param index The index of the column.
 	 */
 	(index: number): ArrayRowChildColumn;
+}
+
+/**
+ * The base specification of a data rows aggregating event handler.
+ * @typeParam DataRow The type of a row of the array of data.
+ */
+export interface BaseAggregateEventHandler<DataRow> {
+	/**
+	 * Aggregate the specified `rows`.
+	 * @param rows The data rows to aggregate.
+	 * @typeParam Result The type of the resulting aggregation.
+	 */
+	<Result extends string | number | boolean>(rows: DataRow[]): Result;
 }
 
 export interface BaseChildColumn extends BaseColumn {
@@ -65,6 +96,23 @@ export interface BaseColumn {
 	 * If undefined, the live-table should display the label as tooltip.
 	 */
 	title?: string;
+}
+
+/**
+ * The base specification of data rows grouping.
+ * @typeParam DataRow The type of a row of the array of data.
+ */
+export interface BaseGrouping<DataRow> {
+	/**
+	 * Whether and how the live-table should aggregate rows data in a group
+	 * footer.
+	 */
+	onAggregateFooter?: AggregateEventHandler<DataRow>;
+	/**
+	 * Whether and how the live-table should aggregate rows data in a group
+	 * header.
+	 */
+	onAggregateHeader?: AggregateEventHandler<DataRow>;
 }
 
 /**
@@ -148,14 +196,36 @@ export interface LiveTableSettings<DataRow> {
 	 */
 	editable?: boolean;
 	/**
+	 * Whether and how the data rows should be grouped.
+	 */
+	grouping?: Grouping<DataRow>;
+	/**
 	 * The callback function executed each time the user inputs in the search
 	 * field.
 	 */
 	onSearchInput?: SearchEventHandler<DataRow>;
 	/**
-	 * Whether the live-table has to display the pagination.
+	 * Whether and how the live-table should display the pagination.
 	 */
 	pagination?: Pagination;
+}
+
+/**
+ * The specification of an aggregating event handler when data rows are objects.
+ * @typeParam DataRow The type of a row of the array of data.
+ */
+export interface ObjectRowAggregateEventHandler<DataRow extends object>
+extends BaseAggregateEventHandler<DataRow> {
+	/**
+	 * Aggregate the values of property `data` of the specified `rows`.
+	 * @param rows The data rows to aggregate.
+	 * @param data The property of data rows to aggregate.
+	 * @typeParam Result The type of the resulting aggregation.
+	 */
+	<Result extends string | number | boolean>(
+		rows: DataRow[],
+		data: keyof DataRow
+	): Result;
 }
 
 export interface ObjectRowChildColumn<DataRow extends object>
@@ -216,6 +286,11 @@ export interface Table<DataRow> {
 	liveTable: LiveTable<DataRow>;
 }
 
+export type AggregateEventHandler<DataRow> =
+DataRow extends unknown[] ? ArrayRowAggregateEventHandler<DataRow> :
+DataRow extends object ? ObjectRowAggregateEventHandler<DataRow> :
+BaseAggregateEventHandler<DataRow>
+
 export type ChildColumn<DataRow> =
 DataRow extends unknown[] ? ArrayRowChildColumn :
 DataRow extends object ? ObjectRowChildColumn<DataRow> :
@@ -232,3 +307,5 @@ export type Columns<DataRow> =
 "auto" |
 Column<DataRow>[] |
 ColumnCreator<DataRow>
+
+export type Grouping<DataRow> = BaseGrouping<DataRow>;
