@@ -10,7 +10,7 @@ import * as Core from ".."
  * @param this The live-table implementation.
  */
 export function isSearchable<DataRow>(this: Core.LiveTable<DataRow>): boolean {
-	return undefined !== this.onSearchInput
+	return undefined !== this.settings.onSearchInput
 }
 
 /**
@@ -20,7 +20,7 @@ export function isSearchable<DataRow>(this: Core.LiveTable<DataRow>): boolean {
  * @param this The live-table implementation.
  */
 export function hasActions<DataRow>(this: Core.LiveTable<DataRow>): boolean {
-	return !!this.actions && this.actions.length > 0
+	return !!this.settings.actions && this.settings.actions.length > 0
 }
 
 /**
