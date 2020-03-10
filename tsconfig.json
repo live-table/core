@@ -4,7 +4,8 @@
 		"declarationDir": "dist",
 		"module": "commonjs",
 		"sourceMap": true,
-		"strict": true
+		"strict": true,
+		"strictBindCallApply": false
 	},
 	"exclude": [
 		"node_modules"
