@@ -3,4 +3,4 @@ import * as Sh from "shelljs"
 
 const webpackConfigFile = Path.resolve(__dirname, "../webpack.config.ts")
 
-Sh.exec(`webpack --config ${webpackConfigFile}`)
+Sh.exec(`webpack --config ${webpackConfigFile}`, { fatal: true })
