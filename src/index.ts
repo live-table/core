@@ -102,6 +102,9 @@ export interface LiveTable<DataRow> {
 }
 
 export interface LiveTableSettings<DataRow> {
+	/**
+	 * The list of actions to attach to the live-table.
+	 */
 	actions?: Action[];
 	/**
 	 * The columns definition.
@@ -197,5 +200,6 @@ DataRow extends object ? ObjectRowColumnCreator<DataRow> :
 Column<DataRow>
 
 export type Columns<DataRow> =
+"auto" |
 Column<DataRow>[] |
 ColumnCreator<DataRow>
