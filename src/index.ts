@@ -106,7 +106,7 @@ export interface LiveTableSettings<DataRow> {
 	/**
 	 * The columns definition.
 	 */
-	columns?: ColumnsOption<DataRow>;
+	columns?: Columns<DataRow>;
 	/**
 	 * The data to pass to the the {@link LiveTable}.
 	 */
@@ -125,7 +125,7 @@ export interface LiveTableSettings<DataRow> {
 	/**
 	 * Whether the live-table has to display the pagination.
 	 */
-	pagination?: PaginationOption;
+	pagination?: Pagination;
 }
 
 export interface ObjectRowChildColumn<DataRow extends object>
@@ -140,7 +140,7 @@ export interface ObjectRowColumnCreator<DataRow extends object> {
 /**
  * The specification of a pagination.
  */
-export interface PaginationOption {
+export interface Pagination {
 	/**
 	 * The **zero-base** index of the page to display.<br>
 	 * This value should not be negative.
@@ -196,6 +196,6 @@ DataRow extends unknown[] ? ArrayRowColumnCreator :
 DataRow extends object ? ObjectRowColumnCreator<DataRow> :
 Column<DataRow>
 
-export type ColumnsOption<DataRow> =
+export type Columns<DataRow> =
 Column<DataRow>[] |
 ColumnCreator<DataRow>
