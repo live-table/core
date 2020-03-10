@@ -88,6 +88,9 @@ export interface LiveTable<DataRow> {
 	 * implementation of {@link LiveTable}.
 	 */
 	isSearchable(): boolean;
+	/**
+	 * Original settings used to configure the live-table.
+	 */
 	settings: LiveTableSettings<DataRow>;
 	/**
 	 * Check whether the implementation should display its header.
@@ -101,6 +104,30 @@ export interface LiveTable<DataRow> {
 	table: Table<DataRow> | null;
 }
 
+/**
+ * The specification of settings used to configure a live-table.
+ *
+ * An implemenation of {@link LiveTable} should expose this properties to
+ * configure it.
+ *
+ * @example
+ * // Exposed as function parameter:
+ * function createLiveTable<DataRow>(settings: LiveTableSettings<DataRow>): LiveTable<DataRow>) {
+ * 	let liveTable: LiveTable<DataRow>
+ * 	// function body
+ * 	return liveTable
+ * }
+ *
+ * // Exposed as class constructor parameter:
+ * class LiveTableImpl<DataRow> implements LiveTable<DataRow> {
+ * 	constructor(settings: LiveTableSettings<DataRow>) {
+ * 		// contructor body
+ * 	}
+ * 	// class body
+ * }
+ *
+ * @typeParam DataRow The type of a row of the array of data.
+ */
 export interface LiveTableSettings<DataRow> {
 	/**
 	 * The list of actions to attach to the live-table.
