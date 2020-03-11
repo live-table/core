@@ -35,7 +35,7 @@ extends BaseAggregateEventHandler<DataRow> {
 	/**
 	 * Aggregate the values at the `index` of the specified `rows`.
 	 * @param rows The data rows to aggregate.
-	 * @param index The property of data rows to aggregate.
+	 * @param index The index of data rows to aggregate.
 	 * @typeParam Result The type of the resulting aggregation.
 	 */
 	<Result extends string | number | boolean>(
@@ -62,6 +62,21 @@ export interface ArrayRowColumnCreator {
 	 * @param index The index of the column.
 	 */
 	(index: number): ArrayRowChildColumn;
+}
+
+export interface ArrayRowCustomGrouping {
+	groupBy: ((index: number) => boolean)[]
+}
+
+/**
+ * The specification of a grouping when data rows are arrays.
+ */
+export interface ArrayRowKeyGrouping<DataRow extends unknown[]>
+extends BaseGrouping<DataRow> {
+	/**
+	 * The index of data rows used to aggregate them.
+	 */
+	groupBy: number;
 }
 
 /**
@@ -99,10 +114,35 @@ export interface BaseColumn {
 }
 
 /**
- * The base specification of data rows grouping.
+ * The specification of a custom data rows grouping.
+ */
+export interface ConditionalGrouping<DataRow> extends BaseGrouping<DataRow> {
+	/**
+	 * The list of filters used to aggregate the data rows.
+	 *
+	 * Each filter MUST be applied to the rows not satisfying the previous
+	 * filters.
+	 */
+	groupBy: GroupingFilter<DataRow>[];
+	/**
+	 * Whether the rows not satisfying the filters should be grouped together.
+	 *
+	 * Its default value MUST be `true`.
+	 */
+	groupUntreated?: boolean;
+}
+
+/**
+ * The base specification of a data rows grouping.
  * @typeParam DataRow The type of a row of the array of data.
  */
 export interface BaseGrouping<DataRow> {
+	/**
+	 * Whether the groups should be collapsible.
+	 *
+	 * Its default value should be `false`.
+	 */
+	collapsible?: boolean;
 	/**
 	 * Whether and how the live-table should aggregate rows data in a group
 	 * footer.
@@ -113,6 +153,10 @@ export interface BaseGrouping<DataRow> {
 	 * header.
 	 */
 	onAggregateHeader?: AggregateEventHandler<DataRow>;
+}
+
+export interface GroupingFilter<DataRow> {
+	(row: DataRow): boolean;
 }
 
 /**
@@ -238,6 +282,17 @@ export interface ObjectRowColumnCreator<DataRow extends object> {
 }
 
 /**
+ * The specification of a grouping when data rows are objects.
+ */
+export interface ObjectRowKeyGrouping<DataRow extends object>
+extends BaseGrouping<DataRow> {
+	/**
+	 * The property of data rows used to aggregate them.
+	 */
+	groupBy: keyof DataRow;
+}
+
+/**
  * The specification of a pagination.
  */
 export interface Pagination {
@@ -308,4 +363,12 @@ export type Columns<DataRow> =
 Column<DataRow>[] |
 ColumnCreator<DataRow>
 
-export type Grouping<DataRow> = BaseGrouping<DataRow>;
+export type Grouping<DataRow> =
+ConditionalGrouping<DataRow> |
+KeyGrouping<DataRow> |
+BaseGrouping<DataRow>
+
+export type KeyGrouping<DataRow> =
+DataRow extends unknown[] ? ArrayRowKeyGrouping<DataRow> :
+DataRow extends object ? ObjectRowKeyGrouping<DataRow> :
+BaseGrouping<DataRow>
