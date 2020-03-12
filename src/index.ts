@@ -160,6 +160,15 @@ export interface GroupingTest<DataRow> {
  */
 export interface LiveTable<DataRow> {
 	/**
+	 * Get the list of groups based on the
+	 * [grouping setting]{@link LiveTableSettings.grouping}.
+	 *
+	 * This function can return the result of the helper
+	 * {@link "helpers/grouping".getGroups} binding the `this` parameter to
+	 * implementation of {@link LiveTable}.
+	 */
+	getGroups(): Group<DataRow>[];
+	/**
 	 * Check whether the implementation has actions.
 	 *
 	 * This function can return the result of the helper
