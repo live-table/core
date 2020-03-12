@@ -34,12 +34,12 @@ export interface ArrayRowAggregateEventHandler<DataRow extends unknown[]>
 extends BaseAggregateEventHandler<DataRow> {
 	/**
 	 * Aggregate the values at the `index` of the specified `rows`.
-	 * @param rows The data rows to aggregate.
+	 * @param group The group of data rows to aggregate.
 	 * @param index The index of data rows to aggregate.
 	 * @typeParam Result The type of the resulting aggregation.
 	 */
 	<Result extends string | number | boolean>(
-		rows: DataRow[],
+		group: Group<DataRow>,
 		index: number
 	): Result;
 }
@@ -64,10 +64,6 @@ export interface ArrayRowColumnCreator {
 	(index: number): ArrayRowChildColumn;
 }
 
-export interface ArrayRowCustomGrouping {
-	groupBy: ((index: number) => boolean)[]
-}
-
 /**
  * The specification of a grouping when data rows are arrays.
  */
@@ -76,7 +72,7 @@ extends BaseGrouping<DataRow> {
 	/**
 	 * The index of data rows used to aggregate them.
 	 */
-	groupBy: number;
+	index: number;
 }
 
 /**
@@ -86,10 +82,10 @@ extends BaseGrouping<DataRow> {
 export interface BaseAggregateEventHandler<DataRow> {
 	/**
 	 * Aggregate the specified `rows`.
-	 * @param rows The data rows to aggregate.
+	 * @param group The group of data rows to aggregate.
 	 * @typeParam Result The type of the resulting aggregation.
 	 */
-	<Result extends string | number | boolean>(rows: DataRow[]): Result;
+	<Result extends string | number | boolean>(group: Group<DataRow>): Result;
 }
 
 export interface BaseChildColumn extends BaseColumn {
@@ -116,20 +112,14 @@ export interface BaseColumn {
 /**
  * The specification of a custom data rows grouping.
  */
-export interface ConditionalGrouping<DataRow> extends BaseGrouping<DataRow> {
+export interface CustomGrouping<DataRow> extends BaseGrouping<DataRow> {
 	/**
 	 * The list of filters used to aggregate the data rows.
 	 *
 	 * Each filter MUST be applied to the rows not satisfying the previous
 	 * filters.
 	 */
-	groupBy: GroupingFilter<DataRow>[];
-	/**
-	 * Whether the rows not satisfying the filters should be grouped together.
-	 *
-	 * Its default value MUST be `true`.
-	 */
-	groupUntreated?: boolean;
+	tests: GroupingTest<DataRow>[];
 }
 
 /**
@@ -155,7 +145,12 @@ export interface BaseGrouping<DataRow> {
 	onAggregateHeader?: AggregateEventHandler<DataRow>;
 }
 
-export interface GroupingFilter<DataRow> {
+export interface Group<DataRow> {
+	label?: string;
+	rows: DataRow[];
+}
+
+export interface GroupingTest<DataRow> {
 	(row: DataRow): boolean;
 }
 
@@ -262,12 +257,12 @@ export interface ObjectRowAggregateEventHandler<DataRow extends object>
 extends BaseAggregateEventHandler<DataRow> {
 	/**
 	 * Aggregate the values of property `data` of the specified `rows`.
-	 * @param rows The data rows to aggregate.
+	 * @param group The group of data rows to aggregate.
 	 * @param data The property of data rows to aggregate.
 	 * @typeParam Result The type of the resulting aggregation.
 	 */
 	<Result extends string | number | boolean>(
-		rows: DataRow[],
+		group: Group<DataRow>,
 		data: keyof DataRow
 	): Result;
 }
@@ -289,7 +284,7 @@ extends BaseGrouping<DataRow> {
 	/**
 	 * The property of data rows used to aggregate them.
 	 */
-	groupBy: keyof DataRow;
+	data: keyof DataRow;
 }
 
 /**
@@ -364,7 +359,7 @@ Column<DataRow>[] |
 ColumnCreator<DataRow>
 
 export type Grouping<DataRow> =
-ConditionalGrouping<DataRow> |
+CustomGrouping<DataRow> |
 KeyGrouping<DataRow> |
 BaseGrouping<DataRow>
 
