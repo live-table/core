@@ -1,9 +1,7 @@
-import * as ClassNames from "./class-names"
 import * as ColumnsHelpers from "./helpers/columns"
 import * as LiveTableHelpers from "./helpers/live-table"
 
 export {
-	ClassNames,
 	ColumnsHelpers,
 	LiveTableHelpers
 }
@@ -159,6 +157,10 @@ export interface GroupingTest<DataRow> {
  * @typeParam DataRow The type of a data row.
  */
 export interface LiveTable<DataRow> {
+	/**
+	 * The base class of the container element of a live-table.
+	 */
+	class: "live-table-container";
 	/**
 	 * Get the list of groups based on the
 	 * [grouping setting]{@link LiveTableSettings.grouping}.
