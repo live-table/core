@@ -4,6 +4,8 @@ export function createCustomGroups<DataRow>(
 	data: DataRow[],
 	grouping: Core.CustomGrouping<DataRow>
 ): Core.Group<DataRow>[] {
+	if (grouping.tests.length === 0) return [{ rows: [...data] }]
+
 	const unresolved: Core.Group<DataRow> = { rows: [] }
 	const groups = data.reduce<Core.Group<DataRow>[]>(
 		(reducedGroups, row) => {
@@ -28,7 +30,7 @@ export function createCustomGroups<DataRow>(
 	return unresolved.rows.length ? [...groups, unresolved] : groups
 }
 
-export function createGroups<DataRow>(
+export function getGroups<DataRow>(
 	this: Core.LiveTable<DataRow>
 ): Core.Group<DataRow>[] {
 	if (!this.settings.grouping) return []
