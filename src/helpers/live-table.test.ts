@@ -8,6 +8,8 @@ let shouldDisplayHeader: () => boolean
 
 beforeEach(() => {
 	liveTable = {
+		class: "live-table-container",
+		getGroups: () => [],
 		hasActions: () => hasActions(),
 		isSearchable: () => isSearchable(),
 		settings: { data: [] },
