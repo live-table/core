@@ -364,6 +364,11 @@ DataRow extends unknown[] ? ArrayRowColumnCreator :
 DataRow extends object ? ObjectRowColumnCreator<DataRow> :
 Column<DataRow>
 
+export type ColumnKey<DataRow> =
+DataRow extends unknown[] ? number :
+DataRow extends object ? keyof DataRow :
+never
+
 export type Columns<DataRow> =
 "auto" |
 Column<DataRow>[] |
@@ -371,10 +376,8 @@ ColumnCreator<DataRow>
 
 export type Grouping<DataRow> =
 CustomGrouping<DataRow> |
-KeyGrouping<DataRow> |
-BaseGrouping<DataRow>
+KeyGrouping<DataRow>
 
-export type KeyGrouping<DataRow> =
-DataRow extends unknown[] ? ArrayRowKeyGrouping<DataRow> :
-DataRow extends object ? ObjectRowKeyGrouping<DataRow> :
-BaseGrouping<DataRow>
+export interface KeyGrouping<DataRow> extends BaseGrouping<DataRow> {
+	key: ColumnKey<DataRow>;
+}
