@@ -57,14 +57,14 @@ describe("isCustomGrouping()", () => {
 			tests: [ o => o.id <= 10 ]
 		}
 
-		expect(GroupingHelpers.isConditionalGrouping(grouping)).toBe(true)
+		expect(GroupingHelpers.isCustomGrouping(grouping)).toBe(true)
 	})
 
 	it("should be false", () => {
 		const grouping: Core.Grouping<{ id: number }> = {
-			data: "id"
+			key: "id"
 		}
 
-		expect(GroupingHelpers.isConditionalGrouping(grouping)).toBe(false)
+		expect(GroupingHelpers.isCustomGrouping(grouping)).toBe(false)
 	})
 })
