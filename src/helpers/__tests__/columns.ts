@@ -1,8 +1,8 @@
-import * as Core from ".."
-import { isParent, isChild } from "./columns"
+import * as Core from "../.."
+import { isParent, isChild } from "../columns"
 
 const childColumn: Core.Column<Foo> = {
-	data: "id",
+	key: "id",
 	label: "Child column"
 }
 

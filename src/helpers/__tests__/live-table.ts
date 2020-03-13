@@ -1,5 +1,5 @@
-import * as Core from ".."
-import * as LiveTableHelpers from "../helpers/live-table"
+import * as Core from "../.."
+import * as LiveTableHelpers from "../live-table"
 
 let liveTable: Core.LiveTable<{}>
 let isSearchable: () => boolean
