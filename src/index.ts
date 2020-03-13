@@ -338,12 +338,12 @@ export interface SearchEventHandler<DataRow> {
 
 /**
  * The specification of a table.
- * @typeParam TDataRow The type of a data row.
+ * @typeParam DataRow The type of a data row.
  */
 export interface Table<DataRow> {
 	/** The last descendant columns. */
 	columns: ChildColumn<DataRow>[];
-	/** The implementation of {@link Core<TDataRow>} nesting this table. */
+	/** The implementation of {@link Core<DataRow>} nesting this table. */
 	liveTable: LiveTable<DataRow>;
 }
 
