@@ -33,19 +33,19 @@ extends BaseAggregateEventHandler<DataRow> {
 	/**
 	 * Aggregate the values at the `index` of the specified `rows`.
 	 * @param group The group of data rows to aggregate.
-	 * @param index The index of data rows to aggregate.
+	 * @param key The index of data rows to aggregate.
 	 * @typeParam Result The type of the resulting aggregation.
 	 */
 	<Result extends string | number | boolean>(
 		group: Group<DataRow>,
-		index: number
+		key: number
 	): Result;
 }
 
 /** The specification of a child column when data rows are arrays. */
 export interface ArrayRowChildColumn extends BaseChildColumn {
 	/** The index of the data row item. */
-	index: number;
+	key: number;
 }
 
 /** The specification of a column creator when data rows are arrays. */
@@ -57,9 +57,9 @@ export interface ArrayRowColumnCreator {
 	 * data row and calls this function on each iteration passing the current
 	 * index to the parameter `index`.
 	 *
-	 * @param index The index of the column.
+	 * @param key The index of the column.
 	 */
-	(index: number): ArrayRowChildColumn;
+	(key: number): ArrayRowChildColumn;
 }
 
 /**
@@ -70,7 +70,7 @@ extends BaseGrouping<DataRow> {
 	/**
 	 * The index of data rows used to aggregate them.
 	 */
-	index: number;
+	key: number;
 }
 
 /**
@@ -269,22 +269,22 @@ extends BaseAggregateEventHandler<DataRow> {
 	/**
 	 * Aggregate the values of property `data` of the specified `rows`.
 	 * @param group The group of data rows to aggregate.
-	 * @param data The property of data rows to aggregate.
+	 * @param key The property of data rows to aggregate.
 	 * @typeParam Result The type of the resulting aggregation.
 	 */
 	<Result extends string | number | boolean>(
 		group: Group<DataRow>,
-		data: keyof DataRow
+		key: keyof DataRow
 	): Result;
 }
 
 export interface ObjectRowChildColumn<DataRow extends object>
 extends BaseChildColumn {
-	data: keyof DataRow;
+	key: keyof DataRow;
 }
 
 export interface ObjectRowColumnCreator<DataRow extends object> {
-	(data: keyof DataRow): ObjectRowChildColumn<DataRow>;
+	(key: keyof DataRow): ObjectRowChildColumn<DataRow>;
 }
 
 /**
@@ -295,7 +295,7 @@ extends BaseGrouping<DataRow> {
 	/**
 	 * The property of data rows used to aggregate them.
 	 */
-	data: keyof DataRow;
+	key: keyof DataRow;
 }
 
 /**
